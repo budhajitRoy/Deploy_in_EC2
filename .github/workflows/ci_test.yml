@@ -1,0 +1,33 @@
+# this yml file should always be inside  the .github/workflows folder
+# the purpose of this github actions is that we perform a set of instructions (specified in the jobs section)
+# whenever an event happens specified under "on"
+name: Perform CI after testing using Pytest
+
+# this specifies the event: whenever there is a push in the main branch
+on:
+  push:
+    branches: [ "main" ]
+
+# if someone push to the main branch, the following set of instructions will be performed.
+jobs:
+  build:
+
+    runs-on: ubuntu-latest # sets up the OS
+
+    steps:
+    - uses: actions/checkout@v4            # this means to check out the latest versions -- it is present in almost all yaml files
+    - name: Set up Python 3.10             # this is the name
+      uses: actions/setup-python@v3        # to install python
+      with:
+        python-version: "3.10"             # version 3.10
+    - name: Install dependencies           # this will install the dependencies
+      run: |                               # | symbol for multi-line 
+        python -m pip install --upgrade pip
+        pip install pytest                 
+        pip install -r requirements.txt
+    - name: Test with pytest               # final step is to run test with pytest
+      run: |
+        pytest
+
+# once we push to the main, we will see these instructions being executed in the Actions tab in GitHub
+# all details for each of these step will be displayed there.
